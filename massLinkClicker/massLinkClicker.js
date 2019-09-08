@@ -1,6 +1,11 @@
 javascript:(function(){
+    if (document.querySelector("div.show-more a") !== null) {
+        alert('The page is not displaying every chapter available.' +
+            '\nClick on "Show more" until there are no more results to load before continuing');
+        return;
+    }
 	/*Initializing control variables*/
-	let rawTitle = document.title.match(/(.*) HorribleSubs/)[1], 
+	let rawTitle = document.title.match(/(.*) HorribleSubs/)[1],
 		title = rawTitle.substr(0,rawTitle.length-2),
 		qList = document.querySelector("div.hs-shows div.rls-info-container").querySelectorAll("div.rls-links-container > div"),
 		tList = qList[0].querySelectorAll("span.dl-type"),
@@ -61,13 +66,25 @@ javascript:(function(){
 	}
 
 	/*Selects each chapter's div, then pick the desired links and click them*/
-	let divs = document.querySelectorAll("div.hs-shows div.rls-info-container");
-	
-	divs.forEach(function(chapter,i){
+	let divs = document.querySelectorAll("div.hs-shows div.rls-info-container"),
+        clicks = 0,
+        stagger = false,
+        cap = 12;
 
+	if (divs.length > cap) {
+	    stagger = !confirm("This show has a lot of episodes! Do you want to download them all at once?\n(OK for 'Yes', CANCEL for 'No')");
+    }
+
+	for (let chapter of divs.values()) {
 		let container = document.getElementById(chapter.id + "-" + quality),
 			node = container.querySelector("span." + type + " a");
-		/*console.log(node);*/
 		node.click();
-	});
+		/*Escape control, if needed*/
+        if (stagger && ++clicks % cap === 0) {
+            if (confirm(cap+" episodes downloaded. Continue?")){
+            } else {
+                return;
+            }
+        }
+	}
 })();
