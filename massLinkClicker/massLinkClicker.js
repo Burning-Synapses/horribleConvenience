@@ -27,7 +27,10 @@ javascript:(function(){
 	let inputtedQuality = prompt("Welcome to a mass link getter for "+title+"!\nWhich quality of video do you want? (choose from "+qualities.join(",")+")"),
 		quality = false
 		;
-
+	/*silent escape*/
+	if (inputtedQuality === null) {
+		return;
+	}
 	qualities.forEach(function(q){
 		if (inputtedQuality === q) {
 			quality = inputtedQuality;
@@ -42,7 +45,10 @@ javascript:(function(){
 	let inputtedType = prompt("Now please select the type of download you want to make.\n"+typesDescription),
 		type = false
 		;
-	
+	/*silent escape*/
+    if (inputtedType === null) {
+        return;
+    }
 	for (let k in types) {
 		if (k === inputtedType) {
 			type = types[k];
